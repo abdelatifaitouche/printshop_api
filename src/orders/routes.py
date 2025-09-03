@@ -1,8 +1,6 @@
 from fastapi import APIRouter , Depends
 from src.db.main import get_db
 from sqlalchemy.orm.session import Session
-from sqlalchemy import select
-from src.orders.models import Orders
 from src.orders.schemas import CreateOrder , OrderBase
 from typing import List
 from src.orders.service import OrderService
@@ -36,4 +34,10 @@ def get_orders(db:Session = Depends(get_db)):
 def create_order(order_data : CreateOrder , db : Session = Depends(get_db)):
     new_order = orders_service.create_order(order_data , db)
     return new_order
+
+
+
+@orders_routes.delete('/delete_order' , response_model=OrderBase)
+def delete_order(order_id : UUID , db : Session  = Depends(get_db)):
+    return orders_service.delete_order(order_id , db)
 

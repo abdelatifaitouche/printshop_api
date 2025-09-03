@@ -1,18 +1,16 @@
 from sqlalchemy import select
-from src.orders.models import Orders
-from src.orders.schemas import CreateOrder , OrderBase
+from src.orders.models.order import Orders
+from src.orders.schemas.order import CreateOrder , OrderBase
 from uuid import UUID
 from sqlalchemy.orm.session import Session
 from sqlalchemy import select
-from src.orders.models import Orders
+from src.orders.models import Orders , OrderItem
 from fastapi.exceptions import HTTPException
 from fastapi import status
 from typing import List
 
 
 class OrderService : 
-
-
 
     def get_all_orders(self , db : Session) -> List[OrderBase] : 
         statement = select(Orders)
@@ -36,15 +34,37 @@ class OrderService :
     
 
     def create_order(self , order_data : CreateOrder , db : Session) -> OrderBase:
-        new_order = order_data.model_dump()
-        order = Orders(**new_order)
+        """
+            Creates an Order, and Order Itrems related
+
+            Since every order can contains mutliple items to process
+
+        """
+
+        order = Orders(order_name = order_data.order_name)
+        
+        for order_item in order_data.order_items :
+            item = OrderItem(item_name=order_item.item_name)
+            order.order_items.append(item)
+
         db.add(order)
         db.commit()
+        db.refresh(order)
         return order
+    
     
     def update_order():
         return
     
 
-    def delete_order():
+    def delete_order(self , order_id : UUID , db : Session):
+        order = self.get_order_by_id(order_id , db)
+        db.delete(order)
+        db.commit()
+        
+        return "Item deleted"
+    
+
+
+    def get_order_item_by_id():
         return
