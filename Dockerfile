@@ -6,8 +6,8 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy app code
-COPY src ./src
+# Copy everything (not just src/)
+COPY . /app
 
 # Set PYTHONPATH to include /app
 ENV PYTHONPATH=/app
@@ -16,4 +16,4 @@ ENV PYTHONPATH=/app
 EXPOSE 8000
 
 # Run server
-CMD ["uvicorn", "src:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "src:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
