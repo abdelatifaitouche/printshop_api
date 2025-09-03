@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+  api:
+    build: .
+    container_name: fastapi_app
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://dbmanager:dbpassword@db:5432/testdb
+      - PYTHONPATH=/app  # Explicitly set for clarity
+    volumes:
+      - ./src:/app/src
+    depends_on:
+      - db
+  db:
+    image: postgres:15-alpine
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: dbmanager
+      POSTGRES_PASSWORD: dbpassword
+      POSTGRES_DB: testdb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres_data:
