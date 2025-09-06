@@ -5,6 +5,8 @@ from src.orders.schemas import CreateOrder , OrderBase
 from typing import List
 from src.orders.service import OrderService
 from uuid import UUID
+from fastapi.responses import JSONResponse
+from fastapi import status
 
 
 
@@ -39,5 +41,7 @@ def create_order(order_data : CreateOrder , db : Session = Depends(get_db)):
 
 @orders_routes.delete('/delete_order' , response_model=OrderBase)
 def delete_order(order_id : UUID , db : Session  = Depends(get_db)):
-    return orders_service.delete_order(order_id , db)
+    orders_service.delete_order(order_id , db)
+
+    return JSONResponse(content={'response' : 'item deleted'} , status_code=status.HTTP_200_OK)
 

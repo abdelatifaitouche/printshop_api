@@ -7,7 +7,7 @@ class Orders(BaseModel):
     __tablename__ = "orders"
 
     order_name: Mapped[str] = mapped_column(Text, nullable=False)
-    order_items = relationship("OrderItem", back_populates="order", lazy="dynamic")
+    order_items = relationship("OrderItem", back_populates="order", lazy="dynamic" , cascade="all, delete-orphan")
     order_status : Mapped[str] = mapped_column(Text , default=OrderStatusEnum.PENDING.value)
 
     def __repr__(self) -> str:

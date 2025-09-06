@@ -57,12 +57,11 @@ class OrderService :
         return
     
 
-    def delete_order(self , order_id : UUID , db : Session):
+    def delete_order(self , order_id : UUID , db : Session) -> None:
         order = self.get_order_by_id(order_id , db)
         db.delete(order)
         db.commit()
         
-        return "Item deleted"
     
 
 
