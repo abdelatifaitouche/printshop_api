@@ -6,6 +6,7 @@ from sqlalchemy import pool
 from alembic import context
 
 from src.orders.models import BaseModel, Orders, OrderItem
+from src.auth.models import User
 
 from src.db.main import Base ,DATABASE_URL
 
